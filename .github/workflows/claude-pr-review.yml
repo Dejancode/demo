@@ -16,6 +16,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install Claude Code
+        uses: pleaseai/setup-claude-code@v1.1.4
+
       - name: Run Claude PR Review
         uses: anthropics/claude-code-action@v1
         with:
