@@ -1,0 +1,35 @@
+name: Claude PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  claude-review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Claude PR Review
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          direct_prompt: |
+            You are a senior code reviewer. Review this pull request thoroughly and post a detailed report as a comment.
+
+            Your review should include:
+            1. **Summary** – What does this PR do?
+            2. **Impact Analysis** – What parts of the codebase are affected and how?
+            3. **Code Quality** – Are there any issues with readability, maintainability, or best practices?
+            4. **Potential Bugs** – Highlight any logic errors, edge cases, or risky changes.
+            5. **Security** – Flag any potential security vulnerabilities.
+            6. **Suggestions** – Concrete improvements or alternatives where applicable.
+            7. **Verdict** – Approve, Request Changes, or Needs Discussion.
+
+            Be constructive, specific, and cite file names and line numbers where relevant.
